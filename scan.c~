@@ -85,7 +85,6 @@ TokenType getToken(void)
    StateType state = START;
    /* flag to indicate save to tokenString */
    int save;
-   int underline; 
    while (state != DONE)
    { int c = getNextChar();
      save = TRUE;
@@ -93,12 +92,9 @@ TokenType getToken(void)
      { case START:
          if (isdigit(c))
            state = INNUM;
-         else if (isalpha(c) || c == '_') {
-               if(c == '_') {
-                    underline = TRUE;  
-               }
+         else if (isalpha(c))
            state = INID;
-         } else if (c == ':')
+         else if (c == ':')
            state = INASSIGN;
          else if ((c == ' ') || (c == '\t') || (c == '\n'))
            save = FALSE;
@@ -175,24 +171,12 @@ TokenType getToken(void)
          }
          break;
        case INID:
-         if(underline == TRUE) {
-            if(isalpha(c) || isdigit(c)) {
-                underline = FALSE;
-            } else if (c == '_'){
-                underline = TRUE;
-            } else {
-                fprintf(listing,"\n>>> ");
-                fprintf(listing,"Syntax error at line ");
-                Error = TRUE;
-            }
-         } else {
-            if (!isalpha(c) && !isdigit(c) && c != '_')
-             { /* backup in the input */
-               ungetNextChar();
-               save = FALSE;
-               state = DONE;
-               currentToken = ID;
-             }
+         if (!isalpha(c))
+         { /* backup in the input */
+           ungetNextChar();
+           save = FALSE;
+           state = DONE;
+           currentToken = ID;
          }
          break;
        case DONE:
