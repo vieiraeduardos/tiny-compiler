@@ -1,6 +1,4 @@
-_a
-a_
-__a
-a__
-_a_
-__a__
+while x then
+ read x
+endwhile
+
