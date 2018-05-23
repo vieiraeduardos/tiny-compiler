@@ -1,4 +1,4 @@
-while x < 0 then
+while x < 0
  read x
 endwhile
 

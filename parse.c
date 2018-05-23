@@ -95,7 +95,7 @@ TreeNode * while_stmt(void)
 { TreeNode * t = newStmtNode(WhileK);
   match(WHILE);
   if (t!=NULL) t->child[0] = exp();
-  match(THEN);
+  //match(THEN);
   if (t!=NULL) t->child[2] = stmt_sequence();
   match(ENDWHILE);
   return t;
