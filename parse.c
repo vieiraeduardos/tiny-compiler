@@ -21,8 +21,8 @@ static TreeNode * repeat_stmt(void);
 static TreeNode * assign_stmt(void);
 static TreeNode * read_stmt(void);
 static TreeNode * write_stmt(void);
-static TreeNode * exp(void);
-static TreeNode * simple_exp(void);
+static TreeNode * expr(void);
+static TreeNode * simple_expr(void);
 static TreeNode * term(void);
 static TreeNode * factor(void);
 
@@ -80,7 +80,7 @@ TreeNode * statement(void)
 TreeNode * if_stmt(void)
 { TreeNode * t = newStmtNode(IfK);
   match(IF);
-  if (t!=NULL) t->child[0] = exp();
+  if (t!=NULL) t->child[0] = expr();
   match(THEN);
   if (t!=NULL) t->child[1] = stmt_sequence();
   if (token==ELSE) {
@@ -95,7 +95,7 @@ TreeNode * while_stmt(void)
 { TreeNode * t = newStmtNode(WhileK);
   match(WHILE);
   match(LPAREN);
-  if (t!=NULL) t->child[0] = exp();
+  if (t!=NULL) t->child[0] = expr();
   match(RPAREN);
   if (t!=NULL) t->child[1] = stmt_sequence();
   match(ENDWHILE);
@@ -107,7 +107,7 @@ TreeNode * repeat_stmt(void)
   match(REPEAT);
   if (t!=NULL) t->child[0] = stmt_sequence();
   match(UNTIL);
-  if (t!=NULL) t->child[1] = exp();
+  if (t!=NULL) t->child[1] = expr();
   return t;
 }
 
@@ -117,7 +117,7 @@ TreeNode * assign_stmt(void)
     t->attr.name = copyString(tokenString);
   match(ID);
   match(ASSIGN);
-  if (t!=NULL) t->child[0] = exp();
+  if (t!=NULL) t->child[0] = expr();
   return t;
 }
 
@@ -133,13 +133,13 @@ TreeNode * read_stmt(void)
 TreeNode * write_stmt(void)
 { TreeNode * t = newStmtNode(WriteK);
   match(WRITE);
-  if (t!=NULL) t->child[0] = exp();
+  if (t!=NULL) t->child[0] = expr();
   return t;
 }
 
 
-TreeNode * exp(void)
-{ TreeNode * t = simple_exp();
+TreeNode * expr(void)
+{ TreeNode * t = simple_expr();
   if ((token==LT)||(token==EQ)) {
     TreeNode * p = newExpNode(OpK);
     if (p!=NULL) {
@@ -149,12 +149,12 @@ TreeNode * exp(void)
     }
     match(token);
     if (t!=NULL)
-      t->child[1] = simple_exp();
+      t->child[1] = simple_expr();
   }
   return t;
 }
 
-TreeNode * simple_exp(void)
+TreeNode * simple_expr(void)
 { TreeNode * t = term();
   while ((token==PLUS)||(token==MINUS))
   { TreeNode * p = newExpNode(OpK);
@@ -201,7 +201,7 @@ TreeNode * factor(void)
       break;
     case LPAREN :
       match(LPAREN);
-      t = exp();
+      t = expr();
       match(RPAREN);
       break;
     default:
