@@ -89,6 +89,20 @@ static void genStmt( TreeNode * tree)
          if (TraceCode)  emitComment("<- if") ;
          break; /* if_k */
 
+       case WhileK:
+         if (TraceCode) emitComment("-> repeat") ;
+         p1 = tree->child[0] ;
+         p2 = tree->child[1] ;
+         savedLoc1 = emitSkip(1);
+         emitComment("repeat: jump after body comes back here");
+         /* generate code for body */
+         cGen(p2);
+         /* generate code for test */
+         cGen(p1);
+         emitRM_Abs("JEQ",ac,savedLoc1,"repeat: jmp back to body");
+         if (TraceCode)  emitComment("<- repeat") ;
+         break; /* while */
+
       case RepeatK:
          if (TraceCode) emitComment("-> repeat") ;
          p1 = tree->child[0] ;
@@ -245,4 +259,3 @@ void codeGen(TreeNode * syntaxTree, char * codefile)
    emitComment("End of execution.");
    emitRO("HALT",0,0,0,"");
 }
-
