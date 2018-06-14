@@ -4,48 +4,83 @@
   0:     LD  6,0(0) 	load maxaddress from location 0
   1:     ST  0,0(0) 	clear location 0
 * End of standard prelude.
+  2:     IN  0,0,0 	read integer value
+  3:     ST  0,0(5) 	read: store value
+* -> while
+* -> Op
+* -> Const
+  4:    LDC  0,0(0) 	load const
+* <- Const
+  5:     ST  0,0(6) 	op: push left
+* -> Id
+  6:     LD  0,0(5) 	load id value
+* <- Id
+  7:     LD  1,0(6) 	op: load left
+  8:    SUB  0,1,0 	op <
+  9:    JLT  0,2(7) 	br if true
+ 10:    LDC  0,0(0) 	false case
+ 11:    LDA  7,1(7) 	unconditional jmp
+ 12:    LDC  0,1(0) 	true case
+* <- Op
 * -> assign
 * -> Const
-  2:    LDC  0,0(0) 	load const
+ 14:    LDC  0,1(0) 	load const
 * <- Const
-  3:     ST  0,0(5) 	assign: store value
+ 15:     ST  0,1(5) 	assign: store value
 * <- assign
-* -> repeat
-* repeat: jump after body comes back here
+* -> while
+* -> Op
+* -> Const
+ 16:    LDC  0,0(0) 	load const
+* <- Const
+ 17:     ST  0,0(6) 	op: push left
+* -> Id
+ 18:     LD  0,0(5) 	load id value
+* <- Id
+ 19:     LD  1,0(6) 	op: load left
+ 20:    SUB  0,1,0 	op <
+ 21:    JLT  0,2(7) 	br if true
+ 22:    LDC  0,0(0) 	false case
+ 23:    LDA  7,1(7) 	unconditional jmp
+ 24:    LDC  0,1(0) 	true case
+* <- Op
 * -> assign
 * -> Op
 * -> Id
-  5:     LD  0,0(5) 	load id value
+ 26:     LD  0,1(5) 	load id value
 * <- Id
-  6:     ST  0,0(6) 	op: push left
-* -> Const
-  7:    LDC  0,1(0) 	load const
-* <- Const
-  8:     LD  1,0(6) 	op: load left
-  9:    ADD  0,1,0 	op +
+ 27:     ST  0,0(6) 	op: push left
+* -> Id
+ 28:     LD  0,0(5) 	load id value
+* <- Id
+ 29:     LD  1,0(6) 	op: load left
+ 30:    MUL  0,1,0 	op *
 * <- Op
- 10:     ST  0,0(5) 	assign: store value
+ 31:     ST  0,1(5) 	assign: store value
 * <- assign
+* -> assign
 * -> Op
 * -> Id
- 11:     LD  0,0(5) 	load id value
+ 32:     LD  0,0(5) 	load id value
 * <- Id
- 12:     ST  0,0(6) 	op: push left
+ 33:     ST  0,0(6) 	op: push left
 * -> Const
- 13:    LDC  0,10(0) 	load const
+ 34:    LDC  0,1(0) 	load const
 * <- Const
- 14:     LD  1,0(6) 	op: load left
- 15:    SUB  0,1,0 	op <
- 16:    JLT  0,2(7) 	br if true
- 17:    LDC  0,0(0) 	false case
- 18:    LDA  7,1(7) 	unconditional jmp
- 19:    LDC  0,1(0) 	true case
+ 35:     LD  1,0(6) 	op: load left
+ 36:    SUB  0,1,0 	op -
 * <- Op
- 20:    JEQ  0,-17(7) 	repeat: jmp back to body
-* <- repeat
+ 37:     ST  0,0(5) 	assign: store value
+* <- assign
+ 38:    LDA  7,-23(7) 	while: jump after body comes back here
+ 25:    JEQ  0,13(7) 	while: jump back to body
+* <- while
 * -> Id
- 21:     LD  0,0(5) 	load id value
+ 39:     LD  0,1(5) 	load id value
 * <- Id
- 22:    OUT  0,0,0 	write ac
+ 40:    OUT  0,0,0 	write ac
+ 41:    LDA  7,-38(7) 	while: jump after body comes back here
+ 13:    JEQ  0,28(7) 	while: jump back to body
+* <- while
 * End of execution.
- 23:   HALT  0,0,0 	
+ 42:   HALT  0,0,0 	
