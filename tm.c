@@ -236,7 +236,7 @@ int readInstructions (void)
   lineNo = 0 ;
   while (! feof(pgm))
   { fgets( in_Line, LINESIZE-2, pgm  ) ;
-    inCol = 0 ; 
+    inCol = 0 ;
     lineNo++;
     lineLen = strlen(in_Line)-1 ;
     if (in_Line[lineLen]=='\n') in_Line[lineLen] = '\0' ;
@@ -268,7 +268,7 @@ int readInstructions (void)
         if ( (! getNum ()) || (num < 0) || (num >= NO_REGS) )
             return error("Bad second register", lineNo, loc);
         arg2 = num;
-        if ( ! skipCh(',')) 
+        if ( ! skipCh(','))
             return error("Missing comma", lineNo,loc);
         if ( (! getNum ()) || (num < 0) || (num >= NO_REGS) )
             return error("Bad third register", lineNo,loc);
@@ -354,7 +354,7 @@ STEPRESULT stepTM (void)
       { printf("Enter value for IN instruction: ") ;
         fflush (stdin);
         fflush (stdout);
-        gets(in_Line);
+        fgets(in_Line,  LINESIZE-2, stdin);
         lineLen = strlen(in_Line) ;
         inCol = 0;
         ok = getNum();
@@ -364,7 +364,7 @@ STEPRESULT stepTM (void)
       while (! ok);
       break;
 
-    case opOUT :  
+    case opOUT :
       printf ("OUT instruction prints: %d\n", reg[r] ) ;
       break;
     case opADD :  reg[r] = reg[s] + reg[t] ;  break;
@@ -407,7 +407,7 @@ int doCommand (void)
   { printf ("Enter command: ");
     fflush (stdin);
     fflush (stdout);
-    gets(in_Line);
+    fgets(in_Line,  LINESIZE-2, stdin);
     lineLen = strlen(in_Line);
     inCol = 0;
   }
@@ -557,7 +557,7 @@ int doCommand (void)
 /* E X E C U T I O N   B E G I N S   H E R E */
 /********************************************/
 
-main( int argc, char * argv[] )
+int main( int argc, char * argv[] )
 { if (argc != 2)
   { printf("usage: %s <filename>\n",argv[0]);
     exit(1);
