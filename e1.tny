@@ -1,0 +1,10 @@
+read x;
+read y;
+while (y<5)
+	while (x<10)
+		x:=x+1;
+		write x
+	endwhile;
+y:=y+1;
+write y
+endwhile

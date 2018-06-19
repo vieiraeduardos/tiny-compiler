@@ -1,0 +1,5 @@
+read x;
+while (x<10)
+	x:=x+1;
+	write x
+endwhile
